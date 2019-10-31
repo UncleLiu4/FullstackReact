@@ -1,0 +1,10 @@
+title Post note on SPA version
+
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+note over browser:
+browser send the new note to server in json format
+end note
+server-->browser: json response
+note over browser:
+browser reads the json response, then re-render the notes
+end note
