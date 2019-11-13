@@ -46,7 +46,7 @@ const CountryDetail = ({ country, hidden }) => {
 
 const CapitalWeather = ({ capital }) => {
   const [weatherObj, setWeatherObj] = useState({})
-  const access_key = '196fce208984e91e5494ff4940d318c8'
+  const access_key = 'deleted'
   const weatherHook = () => {
     console.log('weather hook')
     axios
