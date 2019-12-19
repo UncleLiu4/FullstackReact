@@ -37,6 +37,12 @@ describe('when there is initially some blogs saved', () => {
 		)
 	})
 
+	test('get a blog by id', async () => {
+		const blog = await Blog.findById( '5dfb116593f6b82ff8b6d5df' )
+		const contents = blog.likes
+		expect(contents).toBe(10)
+	})
+
 	describe('viewing a specifin blog', () => {
 
 		test('succeeds with a valid id', async () => {
@@ -119,7 +125,7 @@ describe('when there is initially some blogs saved', () => {
 		})
 	})
 
-	describe('deletion of a note', () => {
+	describe('deletion of a blog', () => {
 		test('succeeds with status code 200 if id is valid', async () => {
 			const blogsAtStart = await helper.blogsInDb()
 			const noteToDelete = blogsAtStart[0]
@@ -137,6 +143,21 @@ describe('when there is initially some blogs saved', () => {
 			const contents = blogsAtEnd.map(r => r.content)
 
 			expect(contents).not.toContain(noteToDelete.content)
+		})
+
+		test('delete a blog failed with 401', async () => {
+			// const blogsAtStart = await helper.blogsInDb()
+			const blogIdToDelete = 3
+			await api
+				.delete(`/api/blogs/${blogIdToDelete}`)
+				.expect(401)
+
+			// const blogsAtEnd = await helper.blogsInDb()
+			// expect(blogsAtEnd.length).toBe(
+			// 	helper.initialBlogs.length - 1
+			// )
+			// const contents = blogsAtEnd.map(r => r.content)
+			// expect(contents).not.toContain(noteToDelete.content)
 		})
 	})
 })

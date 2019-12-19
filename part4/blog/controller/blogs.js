@@ -3,14 +3,6 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
-// const getTokenFrom = request => {
-// 	const authorization = request.get('authorization')
-// 	if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-// 		return authorization.substring(7)
-// 	}
-// 	return null
-// }
-
 blogRouter.get('/', async (request, response) => {
     const blogs = await Blog.find({}).populate('user')
     response.json(blogs.map( blog => blog.toJSON() ))
@@ -46,6 +38,32 @@ blogRouter.post('/', async (request, response, next) => {
     } catch(exception) {
         next(exception)
     }
+})
+
+blogRouter.delete('/:id', async (request, response, next) => {
+    const token = request.token
+    const blogIdToDelete = request.params.id
+	try {
+        const decodedToken = jwt.verify(token, process.env.SECRET)
+		if (!token || !decodedToken.id) {
+			return response.status(401).json({
+				error: 'token missing or invalid'
+			})
+		}
+        const userIdFromToken = decodedToken.id
+        const blog = await Blog.findById( blogIdToDelete )
+
+        if(blog.user.toString() === userIdFromToken.toString()) {
+            console.log('相等')
+            await Blog.findByIdAndRemove(blogIdToDelete)
+    		response.status(204).end()
+        } else {
+            console.log('不相等')
+    		response.status(401).end()
+        }
+	} catch (exception) {
+		next(exception)
+	}
 })
 
 module.exports = blogRouter
