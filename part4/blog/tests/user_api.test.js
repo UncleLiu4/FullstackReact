@@ -26,6 +26,19 @@ describe('when there is initially one user at db', () => {
 		expect(response.body.length).toBe(0)
 	})
 
+	test('validation error', async () => {
+		const newUser = {
+			username: 'UL',
+			name: 'UL',
+			password: 'fullstack',
+		}
+		await api
+			.post('/api/users')
+			.send(newUser)
+			.expect(400)
+			.expect('Content-Type', /application\/json/)
+	})
+
 	test('creation succeeds with a fresh username', async () => {
 		const usersAtStart = await helper.usersInDb()
 

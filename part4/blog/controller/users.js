@@ -10,6 +10,14 @@ userRouter.get('/', async (request, response) => {
 userRouter.post('/', async (request, response, next) => {
     try {
         const body = request.body
+        const { name, username, password } = body
+
+        if(username.length <= 3 || password.length <= 3) {
+            return response.status(400).json({
+				error: 'ValidationError'
+			})
+        }
+
         const salt = bcrypt.genSaltSync(10)
 		const passwordHash = bcrypt.hashSync(body.password, salt)
 
