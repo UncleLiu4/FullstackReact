@@ -26,6 +26,16 @@ describe('when there is initially one user at db', () => {
 		expect(response.body.length).toBe(0)
 	})
 
+	test('find one user', async () => {
+		const user = await User.findOne()
+		expect(user.name).toBe('root')
+	})
+
+	test('find user by id', async () => {
+		const user = await User.findById('5dfb08585f3ac757147d2012')
+		expect(user.name).toBe('Another User')
+	})
+
 	test('validation error', async () => {
 		const newUser = {
 			username: 'UL',
@@ -43,8 +53,8 @@ describe('when there is initially one user at db', () => {
 		const usersAtStart = await helper.usersInDb()
 
 		const newUser = {
-			username: 'UncleLiu',
-			name: 'Uncle Liu',
+			username: 'Another User',
+			name: 'Another User',
 			password: 'fullstack',
 		}
 
