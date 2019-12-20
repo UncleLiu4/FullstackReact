@@ -20,7 +20,9 @@ blogRouter.post('/', async (request, response, next) => {
 				error: 'token missing or invalid'
 			})
 		}
-        const { title, author, url, likes, userId } = body
+        const { title, author, url, likes, } = body
+        const userId = decodedToken.id        
+
         const user = await User.findById(userId)
         const blog = new Blog({
             title,
